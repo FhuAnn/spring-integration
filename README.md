@@ -8,7 +8,15 @@
 Spring Integration is an open source framework, that enables lightweight messaging, within Spring based applications, and, also supports integration with external systems.
 
 - Try to calll endpoint and see how the flow integration works with controller-gateway-serviceActivator
-![alt text](docs/imgs/image.png)
+  ![alt text](docs/imgs/hire-post.png)
+
+- Try to call enpoint and learn about tranformers
+  ![alt text](docs/imgs/practice-transformer.png)
+
+## Components
+
+- Producer, Consumer, channel, message, endpoints.
+- Tranformer: A transformer takes a message from a channel and creates a new message containing coverted payload or message structure.
 
 <!-- ## The series
 

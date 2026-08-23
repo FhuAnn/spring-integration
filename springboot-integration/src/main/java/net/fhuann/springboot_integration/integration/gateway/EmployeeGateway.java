@@ -9,6 +9,7 @@ import net.fhuann.springboot_integration.integration.model.Employee;
 @MessagingGateway
 public interface EmployeeGateway {
 
+    // SERVICE ACTIVATORS
     // Get call
     @Gateway(requestChannel = "${channel.input}")
     public String getEmployeeName(String name);
@@ -16,4 +17,8 @@ public interface EmployeeGateway {
     // Post call
     @Gateway(requestChannel = "${channel.hire.employee}")
     public Message<Employee> hireEmployee(Employee employee);
+
+    // TRANSFORMERS
+    @Gateway(requestChannel = "${channel.employee.status.channel}")
+    public String processEmployeeStatus(String status);
 }

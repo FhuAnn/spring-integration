@@ -1,6 +1,7 @@
 package net.fhuann.springboot_integration.integration.service;
 
 import org.springframework.integration.annotation.ServiceActivator;
+import org.springframework.integration.annotation.Transformer;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.support.MessageBuilder;
@@ -10,7 +11,7 @@ import net.fhuann.springboot_integration.integration.model.Employee;
 
 @Service
 public class EmployeeService {
-
+    // Service Activators
     // Get call
     @ServiceActivator(inputChannel = "${channel.input}")
     public void getEmployeeName(Message<String> name) {
@@ -35,6 +36,23 @@ public class EmployeeService {
     public void getEmployeeStatus(Message<Employee> employee) {
         MessageChannel replyChannel = (MessageChannel) employee.getHeaders().getReplyChannel();
         replyChannel.send(employee);
+    }
+
+    // Transformers
+    @Transformer(inputChannel = "${channel.employee.status.channel}", outputChannel = "output-channel")
+    public Message<String> convertToUppercase(Message<String> status) {
+        String payload = status.getPayload();
+        Message<String> upperCaseStatus = MessageBuilder.withPayload(payload.toUpperCase())
+                .copyHeaders(status.getHeaders()).build();
+        return upperCaseStatus;
+    }
+
+    // COMMON OUTPUT CHANNELS
+    @ServiceActivator(inputChannel = "output-channel")
+    public void consumeStringMessaage(Message<String> message) {
+        System.out.println("Consumed message: " + message.getPayload());
+        MessageChannel replyChannel = (MessageChannel) message.getHeaders().getReplyChannel();
+        replyChannel.send(message);
     }
 
 }
