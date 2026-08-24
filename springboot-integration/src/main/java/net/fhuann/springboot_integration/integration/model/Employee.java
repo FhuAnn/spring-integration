@@ -7,4 +7,5 @@ public class Employee {
     private int employeeId;
     private String employeeName;
     private String employeeStatus;
+    private String employeeDepartment;
 }

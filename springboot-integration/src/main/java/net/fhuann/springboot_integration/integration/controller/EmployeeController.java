@@ -48,4 +48,9 @@ public class EmployeeController {
         return employeeGateway.getEmployeeIfADeveloper(empDesignation);
     }
 
+    // ###################### ROUTER #####################
+    @GetMapping(value = "/getEmployeeDepartment")
+    public String getEmployeeDepartment(@RequestBody Employee employee) {
+        return employeeGateway.getEmployeeDepartment(employee);
+    }
 }

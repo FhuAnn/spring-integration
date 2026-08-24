@@ -29,4 +29,10 @@ public interface EmployeeGateway {
     // ###################### FILTERS #####################
     @Gateway(requestChannel = "${channel.employee.designation}")
     public String getEmployeeIfADeveloper(String empDesignation);
+
+
+    // ###################### Routers #####################
+
+    @Gateway(requestChannel = "${channel.employee.department}")
+    public String getEmployeeDepartment(Employee employee);
 }

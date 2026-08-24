@@ -6,6 +6,7 @@ import java.util.StringJoiner;
 
 import org.springframework.integration.annotation.Aggregator;
 import org.springframework.integration.annotation.Filter;
+import org.springframework.integration.annotation.Router;
 import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.integration.annotation.Splitter;
 import org.springframework.integration.annotation.Transformer;
@@ -87,6 +88,41 @@ public class EmployeeService {
     boolean filter(Message<?> message) {
         String msg = message.getPayload().toString();
         return msg.contains("Dev");
+    }
+
+    // ###################### ROUTER #####################
+    @Router(inputChannel = "${channel.employee.department}")
+    public String getEmployeeDepartment(Message<Employee> message) {
+        String deptRouter = null;
+        switch (message.getPayload().getEmployeeDepartment()) {
+            case "SALES":
+                deptRouter = "sales-channel";
+                break;
+            case "MARKETING":
+                deptRouter = "marketing-channel";
+                break;
+        }
+        return deptRouter;
+    }
+
+    @ServiceActivator(inputChannel = "sales-channel")
+    public void getSalesDept(Message<String> name) {
+        Message<String> sales = MessageBuilder.withPayload("SALE DEPARTMENT: " + name.getPayload())
+                .build();
+        System.out.println("Received Message: " + sales.toString());
+        // Implementation for fetching employee name
+        MessageChannel replyChannel = (MessageChannel) name.getHeaders().getReplyChannel();
+        replyChannel.send(sales);
+    }
+
+    @ServiceActivator(inputChannel = "marketing-channel")
+    public void getMarketingDept(Message<String> name) {
+        Message<String> marketing = MessageBuilder.withPayload("MARKETING DEPARTMENT: " + name.getPayload())
+                .build();
+        System.out.println("Received Message: " + marketing.toString());
+        // Implementation for fetching employee name
+        MessageChannel replyChannel = (MessageChannel) name.getHeaders().getReplyChannel();
+        replyChannel.send(marketing);
     }
 
     // ###################### COMMON OUTPUT CHANNELS #####################

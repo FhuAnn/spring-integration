@@ -17,8 +17,14 @@ Spring Integration is an open source framework, that enables lightweight messagi
   ![alt text](docs/imgs/splitter-logs.png)
 - Try calling endpoint for filter working demo and learn how the filter work: if the method that have filter annotation return true, the flow will transfer to output channel, otherwise it will be dropped. (SeniorDesignUI not contains "Dev so return false)
   ![alt text](docs/imgs/filter.png)
-- Try calling enpoint for combination sematic. 
-![alt text](docs/imgs/aggregator.png)
+- Try calling enpoint for aggregator with combination sematic.
+  ![alt text](docs/imgs/aggregator.png)
+- Try calling enpoint for router. Router is orchestrate to one or more diferent channels depending on a set of condition.
+
+  ![alt text](docs/imgs/marketing-department.png)
+
+  ![alt text](docs/imgs/sales-department.png)
+
 ## Components
 
 - Producer, Consumer, channel, message, endpoints.
@@ -26,7 +32,7 @@ Spring Integration is an open source framework, that enables lightweight messagi
 - Splitter: The splitter is a SI component whole role is to partition a message into several parts and send the resulting messages to be processed independently.
 - Filter: message filters are used to decide whether a message should be passed along orr dropped bassed on some criteria.
 - Aggregator: basically a miror-image of the splitter, the aggregator is a type of mesage handler that recieves, multiple messages and combines them into a single message.
-
+-Router: Routers consume messages from a channel and forward each consumed message to one or more different message channel depending on a set of condition.
 <!-- ## The series
 
 
