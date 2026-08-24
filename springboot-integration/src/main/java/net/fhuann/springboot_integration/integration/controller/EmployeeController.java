@@ -41,4 +41,11 @@ public class EmployeeController {
     public String getManagerList(@PathVariable("managers") String managers) {
         return employeeGateway.getManagerList(managers);
     }
+
+    // ###################### FILTER #####################
+    @GetMapping(value = "/getEmployeeIfADeveloper/{empDesignation}")
+    public String getEmployeeIfADeveloper(@PathVariable("empDesignation") String empDesignation) {
+        return employeeGateway.getEmployeeIfADeveloper(empDesignation);
+    }
+
 }

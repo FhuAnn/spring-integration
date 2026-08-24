@@ -21,7 +21,7 @@ Spring Integration is an open source framework, that enables lightweight messagi
 - Producer, Consumer, channel, message, endpoints.
 - Tranformer: A transformer takes a message from a channel and creates a new message containing coverted payload or message structure.
 - Splitter: The splitter is a SI component whole role is to partition a message into several parts and send the resulting messages to be processed independently.
-
+- Filter: message filters are used to decide whether a message should be passed along orr dropped bassed on some criteria.
 <!-- ## The series
 
 - Spring integration

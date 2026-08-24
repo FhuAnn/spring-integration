@@ -3,6 +3,7 @@ package net.fhuann.springboot_integration.integration.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.integration.annotation.Filter;
 import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.integration.annotation.Splitter;
 import org.springframework.integration.annotation.Transformer;
@@ -62,6 +63,15 @@ public class EmployeeService {
             messages.add(msg);
         }
         return messages;
+    }
+
+    // ###################### FILTER #####################
+    // when the return is true, the message will be sent to the output channel,
+    // otherwise it will be discarded.
+    @Filter(inputChannel = "${channel.employee.designation}", outputChannel = "output-channel")
+    boolean filter(Message<?> message) {
+        String msg = message.getPayload().toString();
+        return msg.contains("Dev");
     }
 
     // ###################### COMMON OUTPUT CHANNELS #####################

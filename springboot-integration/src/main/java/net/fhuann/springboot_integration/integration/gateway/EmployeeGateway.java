@@ -25,4 +25,8 @@ public interface EmployeeGateway {
     // ###################### SPLITTERS #####################
     @Gateway(requestChannel = "${channel.employee.managers}")
     public String getManagerList(String managers);
+
+    // ###################### FILTERS #####################
+    @Gateway(requestChannel = "${channel.employee.designation}")
+    public String getEmployeeIfADeveloper(String empDesignation);
 }
