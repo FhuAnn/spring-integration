@@ -2,7 +2,9 @@ package net.fhuann.springboot_integration.integration.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringJoiner;
 
+import org.springframework.integration.annotation.Aggregator;
 import org.springframework.integration.annotation.Filter;
 import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.integration.annotation.Splitter;
@@ -53,7 +55,7 @@ public class EmployeeService {
     }
 
     // ###################### SPLITTERS #####################
-    @Splitter(inputChannel = "${channel.employee.managers}", outputChannel = "output-channel")
+    @Splitter(inputChannel = "${channel.employee.managers}", outputChannel = "managers-channel")
     List<Message<String>> splitMessage(Message<?> message) {
         List<Message<String>> messages = new ArrayList<Message<String>>();
         String[] msgSplits = message.getPayload().toString().split(",");
@@ -63,6 +65,19 @@ public class EmployeeService {
             messages.add(msg);
         }
         return messages;
+    }
+
+    // ###################### AGGREGATORS #####################
+    @Aggregator(inputChannel = "managers-channel", outputChannel = "output-channel")
+    Message<String> getAllManagers(List<Message<String>> messages) {
+        StringJoiner joiner = new StringJoiner(" & ", "[", "]");
+        for (Message<String> message : messages) {
+            joiner.add(message.getPayload());
+        }
+        String managers = joiner.toString();
+        System.out.println("Managers: " + managers);
+        Message<String> updatedMsg = MessageBuilder.withPayload(managers).build();
+        return updatedMsg;
     }
 
     // ###################### FILTER #####################
