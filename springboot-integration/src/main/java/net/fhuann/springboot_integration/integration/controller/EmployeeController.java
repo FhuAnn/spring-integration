@@ -18,7 +18,7 @@ public class EmployeeController {
     @Autowired
     public EmployeeGateway employeeGateway;
 
-    // SERVICE ACTIVATORS
+    // ###################### SERVICE ACTIVATORS ######################
     @GetMapping(value = "{name}")
     public String getEmployeeName(@PathVariable("name") String name) {
         return employeeGateway.getEmployeeName(name);
@@ -30,9 +30,15 @@ public class EmployeeController {
         return response.getPayload();
     }
 
-    // TRANSFORMERS
+    // ###################### TRANSFORMERS #####################
     @GetMapping(value = "/processEmployeeStatus/{status}")
     public String processEmployeeStatus(@PathVariable("status") String status) {
         return employeeGateway.processEmployeeStatus(status);
+    }
+
+    // ###################### SPLITTERS #####################
+    @GetMapping(value = "/getManagerList/{managers}")
+    public String getManagerList(@PathVariable("managers") String managers) {
+        return employeeGateway.getManagerList(managers);
     }
 }

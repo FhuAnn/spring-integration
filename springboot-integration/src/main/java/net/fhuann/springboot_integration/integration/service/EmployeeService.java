@@ -1,6 +1,10 @@
 package net.fhuann.springboot_integration.integration.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.integration.annotation.ServiceActivator;
+import org.springframework.integration.annotation.Splitter;
 import org.springframework.integration.annotation.Transformer;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
@@ -11,7 +15,7 @@ import net.fhuann.springboot_integration.integration.model.Employee;
 
 @Service
 public class EmployeeService {
-    // Service Activators
+    // ###################### Service Activators #####################
     // Get call
     @ServiceActivator(inputChannel = "${channel.input}")
     public void getEmployeeName(Message<String> name) {
@@ -38,8 +42,8 @@ public class EmployeeService {
         replyChannel.send(employee);
     }
 
-    // Transformers
-    @Transformer(inputChannel = "${channel.employee.status.channel}", outputChannel = "output-channel")
+    // ###################### TRANSFORMERS #####################
+    @Transformer(inputChannel = "${channel.employee.status}", outputChannel = "output-channel")
     public Message<String> convertToUppercase(Message<String> status) {
         String payload = status.getPayload();
         Message<String> upperCaseStatus = MessageBuilder.withPayload(payload.toUpperCase())
@@ -47,7 +51,20 @@ public class EmployeeService {
         return upperCaseStatus;
     }
 
-    // COMMON OUTPUT CHANNELS
+    // ###################### SPLITTERS #####################
+    @Splitter(inputChannel = "${channel.employee.managers}", outputChannel = "output-channel")
+    List<Message<String>> splitMessage(Message<?> message) {
+        List<Message<String>> messages = new ArrayList<Message<String>>();
+        String[] msgSplits = message.getPayload().toString().split(",");
+        for (String split : msgSplits) {
+            Message<String> msg = MessageBuilder.withPayload(split)
+                    .copyHeaders(message.getHeaders()).build();
+            messages.add(msg);
+        }
+        return messages;
+    }
+
+    // ###################### COMMON OUTPUT CHANNELS #####################
     @ServiceActivator(inputChannel = "output-channel")
     public void consumeStringMessaage(Message<String> message) {
         System.out.println("Consumed message: " + message.getPayload());
